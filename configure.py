@@ -18,7 +18,7 @@ def main():
 		if option["type"] in actions:
 			parser.add_argument("--"+option["name"], action=actions[option["type"]], gooey_options={"initial_value": option.get("default")})
 		else:
-			parser.add_argument("--"+option["name"], widget=widgets[option["type"]], help=("Min: {}, Max: {}".format(option.get("min"), option.get("max") if "min" in option or "max" in option else None)), gooey_options={"min": option.get("min"), "max": option.get("max"), "initial_value": option.get("default")}, **({"choices": option["choices"]} if "choices" in option else {}))
+			parser.add_argument("--"+option["name"], widget=widgets[option["type"]], help=("Min: {}, Max: {}".format(option.get("min"), option.get("max")) if "min" in option or "max" in option else None), gooey_options={"min": option.get("min"), "max": option.get("max"), "initial_value": option.get("default")}, **({"choices": option["choices"]} if "choices" in option else {}))
 	options = vars(parser.parse_args())
 	out = options["Proxy file"]
 	del options["Proxy file"]
