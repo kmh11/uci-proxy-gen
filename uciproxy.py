@@ -20,6 +20,7 @@ async def proxy_in(options):
 		line = await loop.run_in_executor(None, sys.stdin.buffer.readline)
 		if line.strip() == b"isready":
 			for name in options:
+				if options[name] is None: continue
 				process.stdin.write(f"setoption name {{}} value {options[name]}\n".format(name.replace("__", " ")).encode("utf-8"))
 		process.stdin.write(line)
 
