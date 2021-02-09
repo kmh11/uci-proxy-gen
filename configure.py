@@ -4,6 +4,7 @@ from gooey import Gooey, GooeyParser
 from pathlib import Path
 import json
 import stat
+import sys
 import os
 
 @Gooey
@@ -24,5 +25,7 @@ def main():
 	with open(out, "w") as f:
 		f.write(open(str(Path(__file__).parent / "uciproxy.py")).read() % (repr(os.environ["ENGINE"]), repr(options)))
 	os.chmod(out, os.stat(out).st_mode | stat.S_IEXEC)
+	with open(out.rpartition(".")[0]+".bat", "w") as f:
+		f.write(sys.executable+" "+out)
 
 main()

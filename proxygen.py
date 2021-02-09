@@ -12,9 +12,16 @@ def main():
 	parser = GooeyParser()
 	parser.add_argument("Engine", help="Location of the chess engine to proxy", widget="FileChooser")
 	args = parser.parse_args()
-	output = subprocess.run([args.Engine], input=b"uci\nquit\n", capture_output=True).stdout.decode("utf-8")
+	p = subprocess.Popen([args.Engine], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+	p.stdin.write(b"uci\n")
+	p.stdin.flush()
+	output = ""
+	for line in p.stdout:
+		output += line.decode("utf-8")
+		if b"uciok" == line.strip(): break
+	p.kill()
 	options = []
-	for line in output.split("\n"):
+	for line in output.split("\r\n" if "\r" in output else "\n"):
 		tokens = line.split(" ")
 		if tokens[0] == "option":
 			option = {}
